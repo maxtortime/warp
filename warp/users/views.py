@@ -2,18 +2,22 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.core.urlresolvers import reverse
-from django.views.generic import DetailView, ListView, RedirectView, UpdateView
+from django.views.generic import DetailView, ListView, RedirectView, UpdateView, CreateView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import User
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
+class UserListView(LoginRequiredMixin, ListView):
     model = User
     # These next two lines tell the view to index lookups by username
     slug_field = 'username'
     slug_url_kwarg = 'username'
+
+
+class UserCreateView(CreateView):
+    model = User
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
@@ -22,6 +26,13 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
     def get_redirect_url(self):
         return reverse('users:detail',
                        kwargs={'username': self.request.user.username})
+
+
+class UserDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    # These next two lines tell the view to index lookups by username
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
@@ -41,8 +52,4 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         return User.objects.get(username=self.request.user.username)
 
 
-class UserListView(LoginRequiredMixin, ListView):
-    model = User
-    # These next two lines tell the view to index lookups by username
-    slug_field = 'username'
-    slug_url_kwarg = 'username'
+

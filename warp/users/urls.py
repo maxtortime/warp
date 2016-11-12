@@ -12,6 +12,11 @@ urlpatterns = [
         name='list'
     ),
     url(
+        regex=r'^create/$',
+        view=views.UserCreateView.as_view(),
+        name='create'
+    ),
+    url(
         regex=r'^~redirect/$',
         view=views.UserRedirectView.as_view(),
         name='redirect'
@@ -26,4 +31,5 @@ urlpatterns = [
         view=views.UserUpdateView.as_view(),
         name='update'
     ),
+
 ]
