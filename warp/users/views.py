@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from django.core.urlresolvers import reverse
-from django.views.generic import DetailView, ListView, RedirectView, UpdateView, CreateView
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.views.generic import DetailView
+from django.views.generic import ListView
+from django.views.generic import RedirectView
+from django.views.generic import UpdateView
+from django.views.generic import FormView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from warp.users.forms import UserCreateForm
 from .models import User
 
 
@@ -16,8 +21,11 @@ class UserListView(LoginRequiredMixin, ListView):
     slug_url_kwarg = 'username'
 
 
-class UserCreateView(CreateView):
-    model = User
+class UserCreateView(FormView):
+    form_class = UserCreateForm
+    template_name = 'user/user_create.html'
+    context_object_name = 'user_create_form'
+    success_url = reverse_lazy('user:login')
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
